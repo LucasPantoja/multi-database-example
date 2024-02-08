@@ -1,0 +1,9 @@
+-- CreateTable
+CREATE TABLE "TB_HEROES" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "power" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "TB_HEROES_pkey" PRIMARY KEY ("id")
+);
