@@ -1,6 +1,7 @@
 version: '3'
 services:
   postgres:
+    container_name: postgres
     image: postgres
     ports: 
       - "5432:5432"
@@ -12,18 +13,16 @@ services:
       - pgnet
 
   mongo:
-    image: mongo
-    ports: 
-      - "27017:27017"
-    environment: 
-      MONGO_INITDB_ROOT_USERNAME: "root"
-      MONGO_INITDB_ROOT_PASSWORD: "root"
-      MONGO_INITDB_DATABASE: "heroes"
-    volumes:
-      - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    container_name: mongo_databse
+    image: prismagraphql/mongo-single-replica:4.4.3-bionic
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: prisma
+      INIT_WAIT_SEC: 3
+    ports:
+      - 27017:27017
     networks:
       - mongonet
-
 
 networks:
   pgnet:
