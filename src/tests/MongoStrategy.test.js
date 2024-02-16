@@ -10,9 +10,21 @@ const MOCK_HERO = {
     power: 'Solo Leveling'
 }
 
+const MOCK_UPDATE_HERO = {
+    name: 'John',
+    power: 'Doe'
+}
+
+const HEROES_MODEL = 'heroes'
+
 describe('Mongo Test Suit Using Prisma ORM', async () => {
     before(async () => {
         await context.connect()
+        await context.create(MOCK_UPDATE_HERO, HEROES_MODEL)
+    })
+
+    after(async () =>{
+        await context.delete()
     })
 
     it('Should be Connected to Database', async () => {
@@ -21,7 +33,29 @@ describe('Mongo Test Suit Using Prisma ORM', async () => {
     })
 
     it('Should Create a Hero', async () => {
-        const { name, power } = await context.create(MOCK_HERO)
-        assert.deepStrictEqual(result, MOCK_HERO)
-    }) 
+        const { name, power } = await context.create(MOCK_HERO, HEROES_MODEL)
+        assert.deepStrictEqual({name, power}, MOCK_HERO)
+    })
+
+    it('Should Return a Hero by Name', async () => {
+        const [{ name, power }] = await context.read(MOCK_HERO.name, HEROES_MODEL)
+        assert.deepStrictEqual({ name, power }, MOCK_HERO)
+    })
+
+    it('Should Update Hero', async () => {
+        const [ hero ] = await context.read(MOCK_UPDATE_HERO.name, HEROES_MODEL)
+        const newHero = {
+            ...hero,
+            name: 'Rudeus',
+            power: 'Wizzard'
+        }
+        const updatedHero = await context.update(hero.id, newHero, HEROES_MODEL)
+        assert.deepStrictEqual(updatedHero, newHero)
+    })
+
+    it('Should Delete a hero', async () => {
+        const [ hero ] = await context.read(undefined, HEROES_MODEL)
+        const result = await context.delete(hero.id, HEROES_MODEL)
+        assert.deepStrictEqual(result,hero)
+    })
 })

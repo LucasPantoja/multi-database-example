@@ -8,17 +8,53 @@ class MongoStrategy extends ICrud {
     }
 
     connect() {
-        this.prisma = new PrismaClient()
+        this.prisma = new PrismaClient({errorFormat: 'pretty'})
     }
 
     async isConnected() {
         return await this.prisma.heroes.findRaw({}) ? true: false
     }
 
-    async create(item) {
-        return await this.prisma.heroes.create({data:item})
+    async create(item, model) {
+        return await this.prisma[model].create({data:item})
     }
 
+    async read(item = {}, model) {
+        if(typeof item === 'object') {
+            return await this.prisma[model].findMany()
+        }
+        return await this.prisma[model].findMany({
+            where: {
+                name: item
+            }
+        })
+    }
+
+    async update(id, item, model) {
+        if(model === 'heroes') {
+            const {itemId, name, power, createdAt} = item
+            return await this.prisma[model].update({
+                where: {
+                    id
+                },
+                data: {
+                    id: itemId,
+                    name,
+                    power,
+                    createdAt
+                }
+            })
+        }
+        return false
+    }
+
+    async delete(id = {}, model) {
+        if(typeof id === 'object') {
+            return this.prisma[model].deleteMany({})
+        }
+        return this.prisma[model].delete({where:{id}})
+        
+    }
 }
 
 module.exports = MongoStrategy

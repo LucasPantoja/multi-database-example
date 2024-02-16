@@ -15,41 +15,44 @@ class PostgresStrategy extends ICrud {
         return await this.prisma.$queryRaw`SELECT 1` ? true: false
     }
 
-    async create(item) {
-        return await this.prisma.heroes.create({data: item})
+    async create(item, model) {
+        return await this.prisma[model].create({data:item})
     }
 
-    async read(item = {}) {
+    async read(item = {}, model) {
         if(typeof item === 'object') {
-            return this.prisma.heroes.findMany()
+            return await this.prisma[model].findMany()
         }
-        return await this.prisma.heroes.findMany({
+        return await this.prisma[model].findMany({
             where: {
                 name: item
             }
         })
     }
 
-    async update(id, item) {
-        const {itemId, name, power, createdAt} = item
-        return await this.prisma.heroes.update({
-            where: {
-                id
-            },
-            data: {
-                id: itemId,
-                name,
-                power,
-                createdAt
-            }
-        })
+    async update(id, item, model) {
+        if(model === 'heroes') {
+            const {itemId, name, power, createdAt} = item
+            return await this.prisma[model].update({
+                where: {
+                    id
+                },
+                data: {
+                    id: itemId,
+                    name,
+                    power,
+                    createdAt
+                }
+            })
+        }
+        return false
     }
 
-    async delete(id = {}) {
+    async delete(id = {}, model) {
         if(typeof id === 'object') {
-            return this.prisma.heroes.deleteMany({})
+            return this.prisma[model].deleteMany({})
         }
-        return this.prisma.heroes.delete({where:{id}})
+        return this.prisma[model].delete({where:{id}})
         
     }
 }
