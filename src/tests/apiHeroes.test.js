@@ -16,7 +16,6 @@ describe('API Heroes Test Suit',() => {
         })
 
         const data = JSON.parse(result.payload)
-
         assert.deepStrictEqual(result.statusCode, 200)
         assert.ok(Array.isArray(data))
     })

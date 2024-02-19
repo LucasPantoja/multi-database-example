@@ -1,5 +1,5 @@
 const { PrismaClient } = require('@prisma-postgres/client')
-const ICrud = require('./interfaces/ICrud')
+const ICrud = require('../interfaces/ICrud')
 
 class PostgresStrategy extends ICrud {
     constructor() {

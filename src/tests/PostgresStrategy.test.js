@@ -1,6 +1,6 @@
 const { describe, it, before, after } = require('node:test')
 const assert = require('node:assert')
-const ContextStrategy = require("../db/strategies/base/contextStrategy");
+const ContextStrategy = require("../db/base/contextStrategy");
 const PostgresStrategy = require("../db/strategies/postgresStrategy");
 
 const context = new ContextStrategy(new PostgresStrategy())

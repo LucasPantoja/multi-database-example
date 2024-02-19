@@ -1,5 +1,5 @@
 const { PrismaClient } = require('@prisma-mongo/client')
-const ICrud = require('./interfaces/ICrud')
+const ICrud = require('../interfaces/ICrud')
 
 class MongoStrategy extends ICrud {
     constructor() {
@@ -14,7 +14,7 @@ class MongoStrategy extends ICrud {
     }
 
     async isConnected() {
-        return await this.prisma.heroes.findRaw({}) ? true: false
+        return await this.prisma[this.model].findRaw({}) ? true: false
     }
 
     async create(item) {

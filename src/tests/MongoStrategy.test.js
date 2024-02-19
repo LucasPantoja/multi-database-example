@@ -1,6 +1,6 @@
 const { describe, it, before, after } = require('node:test')
 const assert = require('node:assert')
-const ContextStrategy = require('../db/strategies/base/contextStrategy')
+const ContextStrategy = require('../db/base/contextStrategy')
 const MongoStrategy = require('../db/strategies/mongoStrategy')
 
 const context = new ContextStrategy(new MongoStrategy())
@@ -19,12 +19,12 @@ const HEROES_MODEL = 'heroes'
 
 describe('Mongo Test Suit Using Prisma ORM', async () => {
     before(async () => {
-        await context.connect()
+        await context.connect(HEROES_MODEL)
         await context.create(MOCK_UPDATE_HERO)
     })
 
     after(async () =>{
-        await context.delete()
+        // await context.delete()
     })
 
     it('Should be Connected to Database', async () => {
