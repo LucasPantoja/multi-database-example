@@ -3,23 +3,23 @@ class ContextStrategy {
         this._database = strategy
     }
 
-    create(item, model) {
-        return this._database.create(item, model)
+    create(item) {
+        return this._database.create(item)
     }
-    read(query, model) {
-        return this._database.read(query, model)
+    read(query) {
+        return this._database.read(query)
     }
-    update(id, item, model) {
-        return this._database.update(id, item, model)
+    update(id, item) {
+        return this._database.update(id, item)
     }
-    delete(id, model) {
-        return this._database.delete(id, model)
+    delete(id) {
+        return this._database.delete(id)
     }
     isConnected() {
         return this._database.isConnected()
     }
-    connect() {
-        return this._database.connect()
+    connect(model) {
+        return this._database.connect(model)
     }
     disconnect() {
         return this._database.disconnect()

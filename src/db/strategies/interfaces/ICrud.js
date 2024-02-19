@@ -5,22 +5,22 @@ class notImplementedException extends Error {
 }
 
 class ICrud {
-    create(model, item) {
+    create(item) {
         throw new notImplementedException()
     }
-    read(model, query) {
+    read(query) {
         throw new notImplementedException()
     }
-    update(model, id, item) {
+    update(id, item) {
         throw new notImplementedException()
     }
-    delete(model, id) {
+    delete(id) {
         throw new notImplementedException()
     }
     isConnected() {
         throw new notImplementedException()
     }
-    connect() {
+    connect(model) {
         throw new notImplementedException()
     }
 }

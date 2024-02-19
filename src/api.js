@@ -7,15 +7,17 @@ const app = new Hapi.Server({
     host: 'localhost'
 })
 
+const heroesModel = 'heroes'
+
 async function main() {
     const context = new ContextStrategy(new MongoStrategy())
-    await context.connect()
-    const heroesModel = 'heroes'
+    await context.connect(heroesModel)
+    
     app.route([{
         path: '/heroes',
         method: 'GET',
         handler: (request, headers) => {
-            return context.read(undefined, heroesModel)
+            return context.read(heroesModel)
         }
     }])
 
