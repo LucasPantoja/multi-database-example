@@ -14,12 +14,12 @@ async function main() {
     app.route([{
         path: '/heroes',
         method: 'GET',
-        handler: (request, head) => {
+        handler: (request, headers) => {
             return context.read(undefined, heroesModel)
         }
     }])
 
-    await app.start()
+    await app.initialize()
     console.log('Server Runnning at Port', app.info.port)
 
     process.on('unhandledRejection', (err) => {
@@ -27,6 +27,8 @@ async function main() {
         console.log(err);
         process.exit(1);
     })
+
+    return app
 }
 
 module.exports =  main()

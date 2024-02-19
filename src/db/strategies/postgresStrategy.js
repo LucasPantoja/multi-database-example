@@ -15,11 +15,11 @@ class PostgresStrategy extends ICrud {
         return await this.prisma.$queryRaw`SELECT 1` ? true: false
     }
 
-    async create(item, model) {
+    async create(model, item) {
         return await this.prisma[model].create({data:item})
     }
 
-    async read(item = {}, model) {
+    async read(model, item = {}) {
         if(typeof item === 'object') {
             return await this.prisma[model].findMany()
         }
@@ -30,7 +30,7 @@ class PostgresStrategy extends ICrud {
         })
     }
 
-    async update(id, item, model) {
+    async update(model, id, item) {
         if(model === 'heroes') {
             const {itemId, name, power, createdAt} = item
             return await this.prisma[model].update({
@@ -48,7 +48,7 @@ class PostgresStrategy extends ICrud {
         return false
     }
 
-    async delete(id = {}, model) {
+    async delete(model, id = {}) {
         if(typeof id === 'object') {
             return this.prisma[model].deleteMany({})
         }

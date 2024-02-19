@@ -15,7 +15,9 @@ describe('API Heroes Test Suit',() => {
             url: '/heroes'
         })
 
-        console.log('AWUI')
-        assert.deepStrictEqual(true, result)
+        const data = JSON.parse(result.payload)
+
+        assert.deepStrictEqual(result.statusCode, 200)
+        assert.ok(Array.isArray(data))
     })
 })
