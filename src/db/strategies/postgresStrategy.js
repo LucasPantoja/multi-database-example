@@ -9,7 +9,7 @@ class PostgresStrategy extends ICrud {
     }
 
     connect(model) {
-        this.prisma = new PrismaClient()
+        this.prisma = new PrismaClient({errorFormat: 'pretty'})
         this.model = model
     }
 
@@ -21,42 +21,21 @@ class PostgresStrategy extends ICrud {
         return await this.prisma[this.model].create({data:item})
     }
 
-    async read(item = {}) {
-        if(typeof item === 'object') {
-            return await this.prisma[this.model].findMany()
-        }
-        return await this.prisma[this.model].findMany({
-            where: {
-                name: item
-            }
-        })
+    async read(item, skip = 0, take = 10) {
+        return await this.prisma[this.model].findMany({ skip, take, where: { name: item } })
     }
 
     async update(id, item) {
-        if(this.model === 'heroes') {
-            const {itemId, name, power, createdAt} = item
-            return await this.prisma[this.model].update({
-                where: {
-                    id
-                },
-                data: {
-                    id: itemId,
-                    name,
-                    power,
-                    createdAt
-                }
-            })
-        }
-        return false
+        return await this.prisma[this.model].update({ where: { id }, data: item })
     }
 
-    async delete(id = {}) {
-        if(typeof id === 'object') {
+    async delete(id) {
+        if(id === undefined) {
             return this.prisma[this.model].deleteMany({})
         }
         return this.prisma[this.model].delete({where:{id}})
-        
     }
+    
 }
 
 module.exports = PostgresStrategy

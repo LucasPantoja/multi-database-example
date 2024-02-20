@@ -3,8 +3,6 @@ const assert = require('node:assert')
 const ContextStrategy = require('../db/base/contextStrategy')
 const MongoStrategy = require('../db/strategies/mongoStrategy')
 
-const context = new ContextStrategy(new MongoStrategy())
-
 const MOCK_HERO = {
     name: 'Sung Jin Woo',
     power: 'Solo Leveling'
@@ -16,11 +14,15 @@ const MOCK_UPDATE_HERO = {
 }
 
 const HEROES_MODEL = 'heroes'
+let MOCK_ID = ''
+let context = {}
 
 describe('Mongo Test Suit Using Prisma ORM', async () => {
     before(async () => {
+        context = new ContextStrategy(new MongoStrategy())
         await context.connect(HEROES_MODEL)
-        await context.create(MOCK_UPDATE_HERO)
+        const result = await context.create(MOCK_UPDATE_HERO)
+        MOCK_ID = result.id
     })
 
     after(async () =>{
@@ -43,14 +45,12 @@ describe('Mongo Test Suit Using Prisma ORM', async () => {
     })
 
     it('Should Update Hero', async () => {
-        const [ hero ] = await context.read(MOCK_UPDATE_HERO.name)
         const newHero = {
-            ...hero,
             name: 'Rudeus',
             power: 'Wizzard'
         }
-        const updatedHero = await context.update(hero.id, newHero)
-        assert.deepStrictEqual(updatedHero, newHero)
+        const {name, power} = await context.update(MOCK_ID, newHero)
+        assert.deepStrictEqual({name, power}, newHero)
     })
 
     it('Should Delete a hero', async () => {

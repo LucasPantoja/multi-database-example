@@ -6,8 +6,8 @@ class ContextStrategy {
     create(item) {
         return this._database.create(item)
     }
-    read(query) {
-        return this._database.read(query)
+    read(query, skip, take) {
+        return this._database.read(query, skip, take)
     }
     update(id, item) {
         return this._database.update(id, item)

@@ -3,8 +3,6 @@ const assert = require('node:assert')
 const ContextStrategy = require("../db/base/contextStrategy");
 const PostgresStrategy = require("../db/strategies/postgresStrategy");
 
-const context = new ContextStrategy(new PostgresStrategy())
-
 const MOCK_HERO = {
     name: 'Sung Jin Woo',
     power: 'Solo Leveling'
@@ -16,15 +14,19 @@ const MOCK_UPDATE_HERO = {
 }
 
 const HEROES_MODEL = 'heroes'
+let MOCK_ID = ''
+let context = {}
 
 describe('Postgres Test Suit Using Prisma ORM', () => {
     before(async () => {
+        context = new ContextStrategy(new PostgresStrategy())
         await context.connect(HEROES_MODEL)
-        await context.create(MOCK_UPDATE_HERO)
+        const result = await context.create(MOCK_UPDATE_HERO)
+        MOCK_ID = result.id
     })
 
     after(async () =>{
-        await context.delete()
+        // await context.delete()
     })
 
     it('Should be Connected to Database', async () => {
@@ -43,14 +45,12 @@ describe('Postgres Test Suit Using Prisma ORM', () => {
     })
 
     it('Should Update Hero', async () => {
-        const [ hero ] = await context.read(MOCK_UPDATE_HERO.name)
         const newHero = {
-            ...hero,
             name: 'Rudeus',
             power: 'Wizzard'
         }
-        const updatedHero = await context.update(hero.id, newHero)
-        assert.deepStrictEqual(updatedHero, newHero)
+        const {name, power} = await context.update(MOCK_ID, newHero)
+        assert.deepStrictEqual({name, power}, newHero)
     })
 
     it('Should Delete a hero', async () => {
