@@ -1,7 +1,7 @@
-const { PrismaClient } = require('@prisma-mongo/client')
-const ICrud = require('../interfaces/ICrud')
+const { PrismaClient } = require('@prisma-postgres/client')
+const IHeroes = require('../interfaces/IHeroes')
 
-class MongoStrategy extends ICrud {
+class HeroesPostgresRepository extends IHeroes {
     constructor() {
         super()
         this.prisma = null
@@ -14,7 +14,7 @@ class MongoStrategy extends ICrud {
     }
 
     async isConnected() {
-        return await this.prisma[this.model].findRaw({}) ? true: false
+        return await this.prisma.$queryRaw`SELECT 1` ? true: false
     }
 
     async create(item) {
@@ -22,7 +22,7 @@ class MongoStrategy extends ICrud {
     }
 
     async read(item, skip = 0, take = 10) {
-        return await this.prisma[this.model].findMany({ skip, take, where: { name: item }})
+        return await this.prisma[this.model].findMany({ skip, take, where: { name: item } })
     }
 
     async update(id, item) {
@@ -38,4 +38,4 @@ class MongoStrategy extends ICrud {
     
 }
 
-module.exports = MongoStrategy
+module.exports = HeroesPostgresRepository

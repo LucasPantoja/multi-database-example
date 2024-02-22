@@ -1,6 +1,6 @@
-class ContextStrategy {
-    constructor(strategy) {
-        this._database = strategy
+class HeroesService {
+    constructor(repository) {
+        this._database = repository
     }
 
     create(item) {
@@ -26,4 +26,4 @@ class ContextStrategy {
     }
 }
 
-module.exports = ContextStrategy
+module.exports = HeroesService

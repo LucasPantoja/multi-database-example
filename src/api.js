@@ -1,6 +1,6 @@
 const Hapi = require('@hapi/hapi')
-const ContextStrategy = require('./db/base/contextStrategy')
-const MongoStrategy = require('./db/strategies/mongoStrategy')
+const HeroesService = require('./services/heroesService')
+const HeroesMongoRepository = require('./repositories/heroesMongoRepository')
 const heroRoutes = require('./routes/heroRoutes')
 
 const app = new Hapi.Server({
@@ -15,11 +15,11 @@ function mapRoutes(instance, methods) {
 }
 
 async function main() {
-    const context = new ContextStrategy(new MongoStrategy())
-    await context.connect(heroesModel)
-    
+    const heroesService = new HeroesService(new HeroesMongoRepository())
+    await heroesService.connect(heroesModel)
+
     app.route([
-        ...mapRoutes(new heroRoutes(context), heroRoutes.methods())
+        ...mapRoutes(new heroRoutes(heroesService), heroRoutes.methods())
     ])
 
     await app.start()

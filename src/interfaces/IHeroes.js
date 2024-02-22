@@ -4,7 +4,7 @@ class notImplementedException extends Error {
     }
 }
 
-class ICrud {
+class IHeroes {
     create(item) {
         throw new notImplementedException()
     }
@@ -25,4 +25,4 @@ class ICrud {
     }
 }
 
-module.exports = ICrud
+module.exports = IHeroes

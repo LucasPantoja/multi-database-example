@@ -1,7 +1,7 @@
 const { describe, it, before, after } = require('node:test')
 const assert = require('node:assert')
-const ContextStrategy = require('../db/base/contextStrategy')
-const MongoStrategy = require('../db/strategies/mongoStrategy')
+const HeroesService = require('../services/heroesService')
+const HeroesMongoRepository = require('../repositories/heroesMongoRepository')
 
 const MOCK_HERO = {
     name: 'Sung Jin Woo',
@@ -15,32 +15,32 @@ const MOCK_UPDATE_HERO = {
 
 const HEROES_MODEL = 'heroes'
 let MOCK_ID = ''
-let context = {}
+let heroesService = {}
 
 describe('Mongo Test Suit Using Prisma ORM', async () => {
     before(async () => {
-        context = new ContextStrategy(new MongoStrategy())
-        await context.connect(HEROES_MODEL)
-        const result = await context.create(MOCK_UPDATE_HERO)
+        heroesService = new HeroesService(new HeroesMongoRepository())
+        await heroesService.connect(HEROES_MODEL)
+        const result = await heroesService.create(MOCK_UPDATE_HERO)
         MOCK_ID = result.id
     })
 
     after(async () =>{
-        // await context.delete()
+        // await heroesService.delete()
     })
 
     it('Should be Connected to Database', async () => {
-        const result = await context.isConnected()
+        const result = await heroesService.isConnected()
         assert.deepStrictEqual(result, true)
     })
 
     it('Should Create a Hero', async () => {
-        const { name, power } = await context.create(MOCK_HERO)
+        const { name, power } = await heroesService.create(MOCK_HERO)
         assert.deepStrictEqual({name, power}, MOCK_HERO)
     })
 
     it('Should Return a Hero by Name', async () => {
-        const [{ name, power }] = await context.read(MOCK_HERO.name)
+        const [{ name, power }] = await heroesService.read(MOCK_HERO.name)
         assert.deepStrictEqual({ name, power }, MOCK_HERO)
     })
 
@@ -49,13 +49,13 @@ describe('Mongo Test Suit Using Prisma ORM', async () => {
             name: 'Rudeus',
             power: 'Wizzard'
         }
-        const {name, power} = await context.update(MOCK_ID, newHero)
+        const {name, power} = await heroesService.update(MOCK_ID, newHero)
         assert.deepStrictEqual({name, power}, newHero)
     })
 
     it('Should Delete a hero', async () => {
-        const [ hero ] = await context.read()
-        const result = await context.delete(hero.id)
+        const [ hero ] = await heroesService.read()
+        const result = await heroesService.delete(hero.id)
         assert.deepStrictEqual(result,hero)
     })
 })
