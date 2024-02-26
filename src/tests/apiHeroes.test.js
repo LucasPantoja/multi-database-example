@@ -3,10 +3,27 @@ const api = require('./../api')
 const assert = require('node:assert')
 
 let app = {}
+const MOCK_HERO = {
+    name: 'Sung Jin Woo',
+    power: 'Solo Leveling'
+}
+const MOCK_UPDATE_HERO = {
+    name: 'John',
+    power: 'Doe'
+}
+let MOCK_ID = ''
 
 describe('API Heroes Test Suit',() => {
     before(async () => {
         app = await api
+        result = await app.inject({
+            method: 'POST',
+            url: '/heroes',
+            payload: MOCK_UPDATE_HERO
+        })
+        const data = JSON.parse(result.payload)
+        MOCK_ID = data.id
+
     })
 
     it('Should Return /heroes', async () => {
@@ -64,5 +81,44 @@ describe('API Heroes Test Suit',() => {
         const data = JSON.parse(result.payload)
         assert.deepStrictEqual(result.statusCode, 200)
         assert.deepStrictEqual(data[0].name, ITEM_NAME)
+    })
+
+    it('Should Register a Hero', async () => {
+        const result = await app.inject({
+            method: 'POST',
+            url: '/heroes',
+            payload: MOCK_HERO
+        })
+        const { message, id } = JSON.parse(result.payload)
+
+        assert.deepStrictEqual(result.statusCode, 200)
+        assert.notStrictEqual(id, undefined)
+        assert.deepStrictEqual(message, 'Hero Successfully Created')
+    })
+
+    it('Should Update a Hero', async () => {
+         const newHero = {
+            name: 'Rudeus', 
+            power: 'Wizzard'
+        }
+        const result = await app.inject({
+            method: 'PATCH',
+            url: `/heroes/${MOCK_ID}`,
+            payload: newHero
+        })
+        const { message } = JSON.parse(result.payload)
+
+        assert.deepStrictEqual(result.statusCode, 200)
+        assert.deepStrictEqual(message, 'Hero Successfully Updated')
+    })
+
+    it('Should Delete a Hero by ID', async () => {
+        const result = await app.inject({
+            method: 'DELETE',
+            url: `/heroes/${MOCK_ID}`
+        })
+        const { message } = JSON.parse(result.payload)
+        assert.deepStrictEqual(result.statusCode, 200)
+        assert.deepStrictEqual(message, 'Hero Successfully Deleted')
     })
 })
