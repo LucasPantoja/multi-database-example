@@ -2,6 +2,9 @@ const Hapi = require('@hapi/hapi')
 const HeroesService = require('./services/heroesService')
 const HeroesMongoRepository = require('./repositories/heroesMongoRepository')
 const heroRoutes = require('./routes/heroRoutes')
+const Inert = require('@hapi/inert')
+const Vision = require('@hapi/vision')
+const HapiSwagger = require('hapi-swagger')
 
 const app = new Hapi.Server({
     port: 5000,
@@ -18,9 +21,25 @@ async function main() {
     const heroesService = new HeroesService(new HeroesMongoRepository())
     await heroesService.connect(heroesModel)
 
-    app.route([
-        ...mapRoutes(new heroRoutes(heroesService), heroRoutes.methods())
+    const swaggerOptions = {
+        info: {
+                title: 'Test API Documentation',
+                version: 'v1.0',
+            }
+        }
+
+    await app.register([
+        Inert,
+        Vision,
+        {
+            plugin: HapiSwagger,
+            options: swaggerOptions
+        }
     ])
+
+    app.route(
+        mapRoutes(new heroRoutes(heroesService), heroRoutes.methods())
+    )
 
     await app.start()
     console.log('Server Runnning at Port', app.info.port)

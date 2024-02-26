@@ -73,14 +73,13 @@ describe('API Heroes Test Suit',() => {
 
     it('Should return Only 1 Hero by Name', async() => {
         const TAKE_SIZE = 1
-        const ITEM_NAME = 'Rudeus'
         const result = await app.inject({
             method: 'GET',
-            url: `/heroes?take=${TAKE_SIZE}&name=${ITEM_NAME}`
+            url: `/heroes?take=${TAKE_SIZE}&name=${MOCK_HERO.name}`
         })
         const data = JSON.parse(result.payload)
         assert.deepStrictEqual(result.statusCode, 200)
-        assert.deepStrictEqual(data[0].name, ITEM_NAME)
+        assert.deepStrictEqual(data[0].name, MOCK_HERO.name)
     })
 
     it('Should Register a Hero', async () => {
