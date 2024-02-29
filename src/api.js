@@ -1,10 +1,13 @@
 const Hapi = require('@hapi/hapi')
 const HeroesService = require('./services/heroesService')
 const HeroesMongoRepository = require('./repositories/heroesMongoRepository')
-const heroRoutes = require('./routes/heroRoutes')
+const HeroRoutes = require('./routes/heroRoutes')
+const AuthRoutes = require('./routes/authRoutes')
 const Inert = require('@hapi/inert')
 const Vision = require('@hapi/vision')
 const HapiSwagger = require('hapi-swagger')
+
+const JWT_SECRET = "SENHA123"
 
 const app = new Hapi.Server({
     port: 5000,
@@ -37,9 +40,10 @@ async function main() {
         }
     ])
 
-    app.route(
-        mapRoutes(new heroRoutes(heroesService), heroRoutes.methods())
-    )
+    app.route([
+        ...mapRoutes(new HeroRoutes(heroesService), HeroRoutes.methods()),
+        ...mapRoutes(new AuthRoutes(JWT_SECRET), AuthRoutes.methods())
+    ])
 
     await app.start()
     console.log('Server Runnning at Port', app.info.port)

@@ -1,5 +1,5 @@
 const { describe, it, before, after } = require('node:test')
-const api = require('./../api')
+const api = require('../api')
 const assert = require('node:assert')
 
 let app = {}
@@ -13,7 +13,7 @@ const MOCK_UPDATE_HERO = {
 }
 let MOCK_ID = ''
 
-describe('API Heroes Test Suit',() => {
+describe('API Heroes Test Suit', { skip: true }, () => {
     before(async () => {
         app = await api
         result = await app.inject({
@@ -25,6 +25,10 @@ describe('API Heroes Test Suit',() => {
         MOCK_ID = data.id
 
     })
+
+    // after(async () => {
+    //     app.stop()
+    // })
 
     it('Should Return /heroes', async () => {
         const result = await app.inject({

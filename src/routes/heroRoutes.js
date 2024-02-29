@@ -17,7 +17,7 @@ class HeroRoutes extends baseRoute{
             method: 'GET',
             config: {
                 tags: ['api'],
-                description: 'Should Return a Heroes List',
+                description: 'Return a Heroes List',
                 notes: 'Can Paginate Results and Filter by name',
                 validate: {
                     failAction,
@@ -46,7 +46,7 @@ class HeroRoutes extends baseRoute{
             method: 'POST',
             config: {
                 tags: ['api'],
-                description: 'Should Create a Hero',
+                description: 'Create a Hero',
                 validate: {
                     failAction,
                     payload: Joi.object({
@@ -77,7 +77,7 @@ class HeroRoutes extends baseRoute{
             method: 'PATCH',
             config: {
                 tags: ['api'],
-                description: 'Should Update a Hero',
+                description: 'Update a Hero',
                 validate: {
                     failAction,
                     params: Joi.object({

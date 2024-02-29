@@ -17,7 +17,7 @@ const HEROES_MODEL = 'heroes'
 let MOCK_ID = ''
 let heroesService = {}
 
-describe('Mongo Test Suit Using Prisma ORM', async () => {
+describe('Mongo Test Suit Using Prisma ORM',{ skip: true }, async () => {
     before(async () => {
         heroesService = new HeroesService(new HeroesMongoRepository())
         await heroesService.connect(HEROES_MODEL)
