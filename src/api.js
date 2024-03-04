@@ -6,6 +6,7 @@ const AuthRoutes = require('./routes/authRoutes')
 const Inert = require('@hapi/inert')
 const Vision = require('@hapi/vision')
 const HapiSwagger = require('hapi-swagger')
+const HapiJwt = require('hapi-auth-jwt2')
 
 const JWT_SECRET = "SENHA123"
 
@@ -32,6 +33,7 @@ async function main() {
         }
 
     await app.register([
+        HapiJwt,
         Inert,
         Vision,
         {
@@ -39,6 +41,17 @@ async function main() {
             options: swaggerOptions
         }
     ])
+
+    app.auth.strategy('jwt', 'jwt', {
+        key: JWT_SECRET,
+        validate: (data, request) => {
+            return {
+                isValid: true
+            }
+        }
+    })
+
+    app.auth.default('jwt')
 
     app.route([
         ...mapRoutes(new HeroRoutes(heroesService), HeroRoutes.methods()),

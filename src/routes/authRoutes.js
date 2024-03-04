@@ -22,6 +22,7 @@ class AuthRoute extends baseRoute{
             path: '/login',
             method: 'POST',
             config: {
+                auth: false,
                 tags: ['api'],
                 description: 'Return Token',
                 notes: 'Login with username and password credentials',
@@ -41,7 +42,7 @@ class AuthRoute extends baseRoute{
                 
                 const token = Jwt.sign({
                     username,
-                    id: 1
+                    id: 1,
                 }, this.secret,)
 
                 return { token }

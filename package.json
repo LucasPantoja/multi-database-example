@@ -19,6 +19,7 @@
     "@hapi/inert": "^7.1.0",
     "@hapi/vision": "^7.0.3",
     "@prisma/client": "^5.9.1",
+    "hapi-auth-jwt2": "^10.5.1",
     "hapi-swagger": "^17.2.1",
     "joi": "^17.12.2",
     "jsonwebtoken": "^9.0.2"

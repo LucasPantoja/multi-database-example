@@ -12,13 +12,18 @@ const MOCK_UPDATE_HERO = {
     power: 'Doe'
 }
 let MOCK_ID = ''
+const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6MSwiaWF0IjoxNzA5MjM4NjQxfQ.BooRA0N_T4XSDPUCMzSzUqx-6-XAALbVCiIDL2vkcv8'
+const headers = {
+    authorization: TOKEN
+}
 
-describe('API Heroes Test Suit', { skip: true }, () => {
+describe('API Heroes Test Suit', { skip: false }, () => {
     before(async () => {
         app = await api
         result = await app.inject({
             method: 'POST',
             url: '/heroes',
+            headers,
             payload: MOCK_UPDATE_HERO
         })
         const data = JSON.parse(result.payload)
@@ -33,7 +38,8 @@ describe('API Heroes Test Suit', { skip: true }, () => {
     it('Should Return /heroes', async () => {
         const result = await app.inject({
             method: 'GET',
-            url: '/heroes'
+            url: '/heroes',
+            headers
         })
 
         const data = JSON.parse(result.payload)
@@ -45,7 +51,8 @@ describe('API Heroes Test Suit', { skip: true }, () => {
         const TAKE_SIZE = 5
         const result = await app.inject({
             method: 'GET',
-            url: `/heroes?take=${TAKE_SIZE}`
+            url: `/heroes?take=${TAKE_SIZE}`,
+            headers
         })
         const data = JSON.parse(result.payload)
         assert.deepStrictEqual(result.statusCode, 200)
@@ -56,7 +63,8 @@ describe('API Heroes Test Suit', { skip: true }, () => {
         const TAKE_SIZE = 'string'
         const result = await app.inject({
             method: 'GET',
-            url: `/heroes?take=${TAKE_SIZE}`
+            url: `/heroes?take=${TAKE_SIZE}`,
+            headers
         })
         const errorResult = {
             "statusCode": 400,
@@ -79,7 +87,8 @@ describe('API Heroes Test Suit', { skip: true }, () => {
         const TAKE_SIZE = 1
         const result = await app.inject({
             method: 'GET',
-            url: `/heroes?take=${TAKE_SIZE}&name=${MOCK_HERO.name}`
+            url: `/heroes?take=${TAKE_SIZE}&name=${MOCK_HERO.name}`,
+            headers
         })
         const data = JSON.parse(result.payload)
         assert.deepStrictEqual(result.statusCode, 200)
@@ -90,7 +99,8 @@ describe('API Heroes Test Suit', { skip: true }, () => {
         const result = await app.inject({
             method: 'POST',
             url: '/heroes',
-            payload: MOCK_HERO
+            payload: MOCK_HERO,
+            headers
         })
         const { message, id } = JSON.parse(result.payload)
 
@@ -107,7 +117,8 @@ describe('API Heroes Test Suit', { skip: true }, () => {
         const result = await app.inject({
             method: 'PATCH',
             url: `/heroes/${MOCK_ID}`,
-            payload: newHero
+            payload: newHero,
+            headers
         })
         const { message } = JSON.parse(result.payload)
 
@@ -118,7 +129,8 @@ describe('API Heroes Test Suit', { skip: true }, () => {
     it('Should Delete a Hero by ID', async () => {
         const result = await app.inject({
             method: 'DELETE',
-            url: `/heroes/${MOCK_ID}`
+            url: `/heroes/${MOCK_ID}`,
+            headers
         })
         const { message } = JSON.parse(result.payload)
         assert.deepStrictEqual(result.statusCode, 200)

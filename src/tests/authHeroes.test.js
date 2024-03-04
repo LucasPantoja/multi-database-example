@@ -5,7 +5,7 @@ const { compile } = require('joi')
 
 let app = {}
 
-describe('Auth Heroes API Test Suit',() => {
+describe('Auth Heroes API Test Suit',{ skip: false }, () => {
     before(async () => {
         app = await api
     })
