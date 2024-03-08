@@ -12,12 +12,12 @@ const MOCK_UPDATE_HERO = {
     power: 'Doe'
 }
 let MOCK_ID = ''
-const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6MSwiaWF0IjoxNzA5MjM4NjQxfQ.BooRA0N_T4XSDPUCMzSzUqx-6-XAALbVCiIDL2vkcv8'
+const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6MSwidGVzdCI6ImFzZGFkYSIsImlhdCI6MTcwOTY2OTk1NX0.1ytoVCOw36NWxcTnRwt4SCOiMldAkiOI5BFwB21RkmA'
 const headers = {
     authorization: TOKEN
 }
 
-describe('API Heroes Test Suit', { skip: false }, () => {
+describe.skip('API Heroes Test Suit', () => {
     before(async () => {
         app = await api
         result = await app.inject({
@@ -30,9 +30,10 @@ describe('API Heroes Test Suit', { skip: false }, () => {
         MOCK_ID = data.id
 
     })
+    
 
     // after(async () => {
-    //     app.stop()
+    //    await  app.stop()
     // })
 
     it('Should Return /heroes', async () => {

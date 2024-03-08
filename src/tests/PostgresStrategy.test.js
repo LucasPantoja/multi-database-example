@@ -17,7 +17,7 @@ const HEROES_MODEL = 'heroes'
 let MOCK_ID = ''
 let heroesService = {}
 
-describe('Postgres Test Suit Using Prisma ORM',{ skip: true }, () => {
+describe('Postgres Test Suit Using Prisma ORM', () => {
     before(async () => {
         heroesService = new HeroesService(new HeroesPostgresRepository())
         await heroesService.connect(HEROES_MODEL)

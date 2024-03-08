@@ -1,14 +1,18 @@
-const { describe, it, before } = require('node:test')
+const { describe, it, before, after } = require('node:test')
 const assert = require('node:assert')
 const api = require('./../api')
 const { compile } = require('joi')
 
 let app = {}
 
-describe('Auth Heroes API Test Suit',{ skip: false }, () => {
+describe('Auth Heroes API Test Suit', () => {
     before(async () => {
         app = await api
     })
+
+    // after(async () => {
+    //     app.stop()
+    // })
 
     it('Should Return a Token', async () => {
         const result = await app.inject({
