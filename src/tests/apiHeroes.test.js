@@ -1,8 +1,9 @@
 const { describe, it, before, after } = require('node:test')
 const api = require('../api')
 const assert = require('node:assert')
+const { init, start } = require('../api')
 
-let app = {}
+let app
 const MOCK_HERO = {
     name: 'Sung Jin Woo',
     power: 'Solo Leveling'
@@ -17,9 +18,9 @@ const headers = {
     authorization: TOKEN
 }
 
-describe.skip('API Heroes Test Suit', () => {
+describe('API Heroes Test Suit', () => {
     before(async () => {
-        app = await api
+        app = await init()
         result = await app.inject({
             method: 'POST',
             url: '/heroes',

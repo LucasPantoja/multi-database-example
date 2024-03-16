@@ -1,6 +1,11 @@
 const baseRoute = require('./base/baseRoute')
 const Joi = require('joi')
 
+const heroSchema= Joi.object({
+    name: Joi.string().min(3).max(100),
+    power: Joi.string().min(3).max(20)
+})
+
 const failAction = (request, headers, error) => {
     throw error
 }

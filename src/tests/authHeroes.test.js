@@ -1,13 +1,13 @@
 const { describe, it, before, after } = require('node:test')
 const assert = require('node:assert')
-const api = require('./../api')
-const { compile } = require('joi')
+const api = require('../api')
+const { init, start } = require('../api')
 
-let app = {}
+let app
 
 describe('Auth Heroes API Test Suit', () => {
     before(async () => {
-        app = await api
+        app = await init()
     })
 
     // after(async () => {

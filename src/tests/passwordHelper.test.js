@@ -15,5 +15,5 @@ describe('Password Helper Test Suit', () => {
     it('Should Validate Password', async () => {
         const result = await PasswordHelper.comparePassword(password, hash)
         assert.ok(result)
-    })
+    }) 
 })
