@@ -25,9 +25,9 @@ describe('Mongo Test Suit Using Prisma ORM', async () => {
         MOCK_ID = result.id
     })
 
-    after(async () =>{
-        // await heroesService.delete()
-    })
+    // after(async () =>{
+    //     await heroesService.delete()
+    // })
 
     it('Should be Connected to Database', async () => {
         const result = await heroesService.isConnected()
