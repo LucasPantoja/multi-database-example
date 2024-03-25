@@ -1,6 +1,8 @@
 const Hapi = require('@hapi/hapi')
-const HeroesService = require('./services/heroesService')
-const HeroesMongoRepository = require('./repositories/heroesMongoRepository')
+const HeroesService = require('./services/baseService')
+const HeroesMongoRepository = require('./repositories/mongoRepository')
+const UsersService = require('./services/baseService')
+const UsersPostgresRepository = require('./repositories/postgresRepository')
 const HeroRoutes = require('./routes/heroRoutes')
 const AuthRoutes = require('./routes/authRoutes')
 const Inert = require('@hapi/inert')
@@ -24,6 +26,10 @@ async function setServerConfigs() {
     const heroesService = new HeroesService(new HeroesMongoRepository())
     await heroesService.connect(heroesModel)
 
+    const userModel = 'users'
+    const usersService = new UsersService(new UsersPostgresRepository())
+    await usersService.connect(userModel)
+
     const swaggerOptions = {
         info: {
                 title: 'Test API Documentation',
@@ -43,10 +49,12 @@ async function setServerConfigs() {
 
     server.auth.strategy('jwt', 'jwt', {
         key: JWT_SECRET,
-        validate: (data, request) => {
-            return {
-                isValid: true
-            }
+        validate: async (data, request) => {
+            const result = await usersService.read(data.username.toLowerCase())
+            if(!result)
+                return { isValid: false }
+
+            return { isValid: true }
         }
     })
 
@@ -54,7 +62,7 @@ async function setServerConfigs() {
 
     server.route([
         ...mapRoutes(new HeroRoutes(heroesService), HeroRoutes.methods()),
-        ...mapRoutes(new AuthRoutes(JWT_SECRET), AuthRoutes.methods())
+        ...mapRoutes(new AuthRoutes(JWT_SECRET, usersService), AuthRoutes.methods())
     ])
 
     return server
@@ -72,48 +80,3 @@ exports.start = async () => {
     console.log(`Server running at: ${server.info.uri}`);
     return server;
 }
-
-// async function main() {
-//     const heroesService = new HeroesService(new HeroesMongoRepository())
-//     await heroesService.connect(heroesModel)
-
-//     const swaggerOptions = {
-//         info: {
-//                 title: 'Test API Documentation',
-//                 version: 'v1.0',
-//             }
-//         }
-
-//     await server.register([
-//         HapiJwt,
-//         Inert,
-//         Vision,
-//         {
-//             plugin: HapiSwagger,
-//             options: swaggerOptions
-//         }
-//     ])
-
-//     server.auth.strategy('jwt', 'jwt', {
-//         key: JWT_SECRET,
-//         validate: (data, request) => {
-//             return {
-//                 isValid: true
-//             }
-//         }
-//     })
-
-//     server.auth.default('jwt')
-
-//     server.route([
-//         ...mapRoutes(new HeroRoutes(heroesService), HeroRoutes.methods()),
-//         ...mapRoutes(new AuthRoutes(JWT_SECRET), AuthRoutes.methods())
-//     ])
-
-//     await server.start()
-//     console.log('Server Runnning at Port', server.info.port)
-
-//     return server
-// }
-
-// module.exports =  main()

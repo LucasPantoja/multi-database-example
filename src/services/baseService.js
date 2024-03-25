@@ -1,4 +1,4 @@
-class HeroesService {
+class BaseService {
     constructor(repository) {
         this._database = repository
     }
@@ -9,8 +9,8 @@ class HeroesService {
     read(query, skip, take) {
         return this._database.read(query, skip, take)
     }
-    update(id, item) {
-        return this._database.update(id, item)
+    update(id, item, upsert = false) {
+        return this._database.update(id, item, upsert)
     }
     delete(id) {
         return this._database.delete(id)
@@ -26,4 +26,4 @@ class HeroesService {
     }
 }
 
-module.exports = HeroesService
+module.exports = BaseService

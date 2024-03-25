@@ -1,7 +1,7 @@
 const { describe, it, before, after } = require('node:test')
 const assert = require('node:assert')
-const HeroesService = require('../services/heroesService')
-const HeroesMongoRepository = require('../repositories/heroesMongoRepository')
+const HeroesService = require('../services/baseService')
+const HeroesMongoRepository = require('../repositories/mongoRepository')
 
 const MOCK_HERO = {
     name: 'Sung Jin Woo',

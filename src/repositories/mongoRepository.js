@@ -1,7 +1,7 @@
-const { PrismaClient } = require('@prisma-postgres/client')
-const IHeroes = require('../interfaces/IHeroes')
+const { PrismaClient } = require('@prisma-mongo/client')
+const IHeroes = require('../interfaces/IBase')
 
-class HeroesPostgresRepository extends IHeroes {
+class MongoRepository extends IHeroes {
     constructor() {
         super()
         this.prisma = null
@@ -14,7 +14,7 @@ class HeroesPostgresRepository extends IHeroes {
     }
 
     async isConnected() {
-        return await this.prisma.$queryRaw`SELECT 1` ? true: false
+        return await this.prisma[this.model].findRaw({}) ? true: false
     }
 
     async create(item) {
@@ -22,7 +22,7 @@ class HeroesPostgresRepository extends IHeroes {
     }
 
     async read(item, skip = 0, take = 10) {
-        return await this.prisma[this.model].findMany({ skip, take, where: { name: item } })
+        return await this.prisma[this.model].findMany({ skip, take, where: { name: item }})
     }
 
     async update(id, item) {
@@ -38,4 +38,4 @@ class HeroesPostgresRepository extends IHeroes {
     
 }
 
-module.exports = HeroesPostgresRepository
+module.exports = MongoRepository

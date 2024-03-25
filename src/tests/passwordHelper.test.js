@@ -9,6 +9,7 @@ describe('Password Helper Test Suit', () => {
 
     it('Should Return a Hash', async () => {
         const result = await PasswordHelper.hashPassword(password)
+        console.log(result)
         assert.ok(result.length > 10)
     })
 
