@@ -11,7 +11,7 @@
     "prisma:migrate": "npx prisma db push --schema prisma/mongo/schema.prisma && npx prisma migrate dev --schema prisma/postgres/schema.prisma"
   },
   "keywords": [],
-  "author": "",
+  "author": "LucasPantoja <lfpantoja.dev@gmail.com>",
   "license": "ISC",
   "devDependencies": {},
   "dependencies": {
@@ -26,5 +26,6 @@
     "joi": "^17.12.2",
     "jsonwebtoken": "^9.0.2",
     "prisma": "^5.10.2"
-  }
+  },
+  "repository": "https://github.com/LucasPantoja/multi-database-example.git"
 }
